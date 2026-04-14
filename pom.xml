@@ -1,8 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+	<parent>
+		<groupId>org.matsim</groupId>
+		<artifactId>matsim-all</artifactId>
+
+		<!-- Options: stable build based on pull requests (e.g. 16.0-PR2778), weekly (e.g. 15.0-2023w01) or official (e.g. 14.0) releases -->
+		<!--		<version>16.0-PR2509</version>-->
+		<version>2026.0</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.matsim</groupId>
 	<artifactId>matsim-example-project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -10,13 +18,14 @@
 	<description>MATSim example project</description>
 
 	<properties>
-		<!-- Options: stable build based on pull requests (e.g. 15.0-PR2344), weekly (e.g. 15.0-2023w01) or official (e.g. 14.0) releases -->
-		<!--		<matsim.version>16.0-PR2509</matsim.version>-->
-		<matsim.version>2024.0</matsim.version>
+
+		<!-- Don't change version here, but in the parent section above! -->
+		<matsim.version>${parent.version}</matsim.version>
+        <main.class>org.matsim.project.RunMatsimModelImplementation</main.class>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.release>17</maven.compiler.release>
+		<maven.compiler.release>25</maven.compiler.release>
 	</properties>
 
 	<repositories>
@@ -56,7 +65,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.10.2</version>
+			<version>6.0.3</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -134,6 +143,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.matsim.contrib</groupId>
+			<artifactId>simwrapper</artifactId>
+			<version>${matsim.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.matsim.contrib</groupId>
 			<artifactId>vsp</artifactId>
 			<version>${matsim.version}</version>
 		</dependency>
@@ -178,10 +192,11 @@
 								<!-- The following sets the main class for the executable jar as you otherwise would with the assembly plugin -->
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>org.matsim.gui.MATSimGUI</Main-Class>
+										<Main-Class>${main.class}</Main-Class>
 										<Specification-Vendor>org.matsim</Specification-Vendor>
 										<Implementation-Vendor>org.matsim</Implementation-Vendor>
 										<Implementation-Version>${project.version}</Implementation-Version>
+                                        <Multi-Release>true</Multi-Release>
 									</manifestEntries>
 								</transformer>
 								<!-- The following merges the various GeoTools META-INF/services files         -->
